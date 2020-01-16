@@ -1,0 +1,50 @@
+[
+  {
+    "outputFileName": "assets/app/Admin.min.js",
+    "inputFiles": [
+      "assets/app/Admin.js"
+    ]
+  },
+  {
+    "outputFileName": "assets/app/Checkout.min.js",
+    "inputFiles": [
+      "assets/app/Checkout.js"
+    ]
+  },
+  {
+    "outputFileName": "assets/app/Common.min.js",
+    "inputFiles": [
+      "assets/app/Common.js"
+    ]
+  },
+  {
+    "outputFileName": "assets/app/default.min.js",
+    "inputFiles": [
+      "assets/app/default.js"
+    ]
+  },
+  {
+    "outputFileName": "assets/app/MyAccount.min.js",
+    "inputFiles": [
+      "assets/app/MyAccount.js"
+    ]
+  },
+  {
+    "outputFileName": "assets/app/ProductAdmin.min.js",
+    "inputFiles": [
+      "assets/app/ProductAdmin.js"
+    ]
+  },
+  {
+    "outputFileName": "assets/app/utils.min.js",
+    "inputFiles": [
+      "assets/app/utils.js"
+    ]
+  },
+  {
+    "outputFileName": "assets/app/toastr.min.js",
+    "inputFiles": [
+      "assets/app/toastr.js"
+    ]
+  }
+]

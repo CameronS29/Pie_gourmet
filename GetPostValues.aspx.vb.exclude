@@ -1,0 +1,25 @@
+﻿
+Partial Class application_reports_GetPostValues
+    Inherits System.Web.UI.Page
+
+    Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        'Write Out Post Values
+        Dim submittedValuesCollection As NameValueCollection = Request.QueryString
+        Dim submittedValuesCollectionForm As NameValueCollection = Request.Form
+
+        Dim TestWrite As New StringBuilder
+
+        TestWrite.Append("<h3>Query String Values</h3>")
+        For Each key As String In submittedValuesCollection.AllKeys
+            TestWrite.Append(key & " - " & submittedValuesCollection(key) & vbCrLf)
+        Next
+
+        TestWrite.Append("<h3>Form Post Values</h3>")
+        For Each key As String In submittedValuesCollectionForm.AllKeys
+            TestWrite.Append(key & " - " & submittedValuesCollectionForm(key) & vbCrLf)
+        Next
+
+        TempFileCache.WriteFile("D:\Project_Build\PieGourmet\WebV3\temp\TestPost.htm", TestWrite.ToString)
+    End Sub
+
+End Class

@@ -1,0 +1,2 @@
+Time: 2:50 PM | User: shop@piegourmet.com | Subject: Pie Gourmet Order Confirmation | Email Error: IOException occurred. InnerException message follows: Could not find a part of the path 'C:\MailBeeNetQueue Files\Pickup\de7f45cbe9c0ae5aeb52e03f4ba892733186d7dc.eml'.
+Time: 3:26 PM | User: shop@piegourmet.com | Subject: Pie Gourmet Order Confirmation | Email Error: IOException occurred. InnerException message follows: Could not find a part of the path 'C:\MailBeeNetQueue Files\Pickup\0577e87fcbbd8fcd8f7eb003e29dfede45910ad9.eml'.

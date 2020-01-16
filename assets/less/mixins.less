@@ -1,0 +1,162 @@
+// Bootstrap Button Variant
+
+.button-variant(@color, @background, @border) {
+	color: @color;
+	background-color: @background;
+	border: 0;
+
+	&:hover,
+	&:focus,
+	&:active,
+	&.active,
+	.open .dropdown-toggle& {
+		color: @color;
+		background-color: darken(@background, 10%);
+        border-color: darken(@border, 12%);
+	}
+	&:active,
+	&.active,
+	.open .dropdown-toggle& {
+		background-image: none;
+	}
+	&.disabled,
+	&[disabled],
+	fieldset[disabled] & {
+		&,
+		&:hover,
+		&:focus,
+		&:active,
+		&.active {
+			background-color: @background;
+			border: 0;
+		}
+	}
+
+	.badge {
+		color: @background;
+		background-color: @color;
+	}
+}
+
+// Background Features
+
+.background-cover() {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+// Font Selections
+
+.serif-font() {
+	font-family: "Old Standard TT", Georgia, Times, serif;
+}
+
+.script-font() {
+	font-family: 'nexa_rust_script_l0regular', cursive;
+}
+
+.body-font() {
+	font-family: "Old Standard TT", Georgia, Times, serif;
+}
+
+.heading-font() {
+	font-family: 'novecento_sans_wide_bookbold', sans-serif;
+	text-transform: uppercase;
+}
+
+// Create body color classes
+
+.colorscheme(@color) {
+        .text-primary, ul.social-buttons li a, a, .navbar-inverse .nav li a:hover, .navbar-inverse .nav li a:focus, .navbar-default .nav li a:hover, .navbar-default .nav li a:focus  {
+            color: @color;
+        }
+        .navbar-default {
+            .dropdown-menu {
+                background-color: @color !important;
+            }
+        }
+        .navbar-inverse {
+            .dropdown-menu {
+                background-color: darken(@color,25%) !important;
+            }
+        }
+        .navbar-default .nav li.dropdown a:hover, .navbar-default .nav li.dropdown a:focus, .navbar-inverse .nav li.dropdown a:hover, .navbar-inverse .nav li.dropdown a:focus {
+            color: @color !important;
+        }
+        .navbar-default .nav li.active a, .navbar-inverse .nav li.active a {
+            background: darken(@color,20%) !important;
+        }
+        .navbar-default, .navbar-default .navbar-toggle, .navbar-default .navbar-nav > li.active > a {
+          background-color: @color !important;
+          a {
+            color: white;
+          }
+        }
+        .navbar-inverse, .navbar-inverse .navbar-toggle, .navbar-inverse .navbar-nav > li.active > a {
+            background-color: darken(@color,25%) !important;
+        }
+        #portfolio .portfolio-item .portfolio-link .portfolio-hover, .timeline > li .timeline-image, .blog-col .blog-preview-img .caption {
+            background-color: @color !important;
+        }
+        a:hover, a:focus, a:active, a.active {
+            color: white !important;
+        }
+        .btn-primary, .btn-xl {
+            background-color: @color;
+            border: 0;
+            color: white;
+        }
+        .navbar-nav li.active a:hover, .navbar-toggle:hover, .navbar-toggle:focus, .btn-primary:hover, .btn-primary:focus, .btn-primary.active, .btn-xl:hover, .btn-xl:focus, .btn-xl:active, .btn-xl.active, .open .dropdown-toggle.btn-xl {
+            background-color: darken(@color,10%);
+            border: 0;
+            color: white;
+        }
+        a.carousel-control, a.btn-circle{
+            color: white;
+        }
+        .navbar-inverse .navbar-nav > .active > a {
+            color: white !important;
+        }
+        .header-10-sub {
+          background-color: @color !important;
+        }
+        .image-wrapper {
+          background-color: @color !important;
+        }
+        .content-23 .bg {
+          background-color: fade(@color,50%) ;
+        }
+        footer {
+            a {
+                color: rgba(255, 255, 255, 0.7);
+            }
+            a:hover {
+                color: rgba(255, 255, 255, 1.0);
+            }
+            .section-subheading {
+                span { 
+                    color: @color;
+                }
+                &:after {
+                    border-bottom: 2px solid @color;
+                }
+            }
+        }
+        section .section-divider {
+            color: @color;
+        }
+        #contact .contact-details .section-subheading span {
+            color: @color;
+        }
+        #style-switcher a.panel-button:hover {
+            color: @color !important;
+        }
+        footer .inner a {
+            color: darken(@color,50%);
+        }
+        footer .inner a:hover {
+            color: darken(@color,70%) !important;
+        }
+}
