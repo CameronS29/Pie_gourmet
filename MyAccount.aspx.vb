@@ -89,6 +89,7 @@ Partial Class MyAccount
         Dim RetStr As String = ""
         Dim pFlag As Boolean = False
         Dim LoadMyPage As String = ""
+        System.Console.Write("This is dbCommand", dbCommand.CommandText)
 
         ' Add Parameters to SPROC
         db.AddInParameter(dbCommand, "username", DbType.String, Common.SQLEncode(username))

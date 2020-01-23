@@ -561,13 +561,13 @@ function CompleteCheckout() {
                 cd.InvoiceRef = sessionid;
                 cd.username = username;
                 cd.PayBatch = sessionid;
+                console.log(sessionid);
 
                 //Pass class to server, Save data
                 Checkout.ValidateSubmitCreditCardProcess(cd, CompleteCheckoutCallback);
                 break;
             case "pickup":
                 Checkout.FinalOrderSubmit(sessionid, pt, CompleteCheckoutPickupCallback);
-
             case "paypal":
                 //Processed on another page.
         }
@@ -576,7 +576,7 @@ function CompleteCheckout() {
 }
 
 function CompleteCheckoutCallback(res) {
-   // console.log(res.value);
+    console.log(res.value);
 
     if (res.value == null || res.error != null) {
         ShowAutoAlert('Order Process Error', GetResError(res.error) + ' - ' + res.value, 'error', true);
@@ -600,7 +600,7 @@ function CompleteCheckoutCallback(res) {
 }
 
 function CompleteCheckoutPickupCallback(res) {
-    // console.log(res.value);
+    console.log(res.value);
 
     if (res.value == null || res.error != null) {
         ShowAutoAlert('Order Process Error', GetResError(res.error) + ' - ' + res.value, 'error', true);
@@ -610,10 +610,11 @@ function CompleteCheckoutPickupCallback(res) {
         var arr = ret.split("|");
         var err = arr[0];
         var msg = arr[1];
+        var id = arr[2];
 
         if (err == 0) {
-            //Goto Tab 2
-            showFinalCheckout(msg);
+    //         //Goto Tab 2
+            showFinalCheckout(id);
             ShowAutoAlert('Order Confirmed', 'Your order has been confirmed and we are busy getting it ready.', 'success', true);
         }
         else {
@@ -623,6 +624,7 @@ function CompleteCheckoutPickupCallback(res) {
 }
 
 function showFinalCheckout(id) {
+    console.log('this is id', id);
     var txt = Checkout.BuildCartItem(id).value;
     SetMyHTML('ProdCheckoutForm', txt);
 }

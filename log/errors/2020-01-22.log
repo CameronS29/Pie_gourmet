@@ -1,0 +1,15 @@
+2020-01-22 19:33:41.5942 ERROR Global Functions: Login failed for user 'pie_dev'.
+2020-01-22 19:33:42.9371 ERROR Global Functions: ShowCart - Login failed for user 'pie_dev'.
+2020-01-22 19:34:23.0918 ERROR Global Functions: Cannot open database "PieGourmetV2" requested by the login. The login failed.
+Login failed for user 'WORKGROUP\DESKTOP-CKG6762$'.
+2020-01-22 19:34:23.6801 ERROR Global Functions: ShowCart - Cannot open database "PieGourmetV2" requested by the login. The login failed.
+Login failed for user 'WORKGROUP\DESKTOP-CKG6762$'.
+2020-01-22 20:05:36.3339 ERROR Checkout Functions: ValidateSubmitCreditCardProcess - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
+2020-01-22 20:21:03.1781 ERROR Checkout Functions: ValidateSubmitCreditCardProcess - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
+2020-01-22 20:47:19.6718 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
+2020-01-22 20:52:06.9349 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
+2020-01-22 20:57:28.1290 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
+2020-01-22 21:00:33.0134 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
+2020-01-22 21:02:49.4520 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
+2020-01-22 21:04:53.0598 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
+2020-01-22 21:07:20.7584 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.

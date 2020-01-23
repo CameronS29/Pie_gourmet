@@ -457,7 +457,7 @@ Partial Class Checkout
 
         Try
             CC.LogFile = TempFolder & "\CCLog.txt"
-            CC.UseTestTransaction = False
+            CC.UseTestTransaction = True
 
             ' *** Tell whether we do SALE or Pre-Auth
             CC.ProcessType = App.Configuration.CCProcessType
@@ -515,12 +515,12 @@ Partial Class Checkout
             'Debug Write Values
             'Dim DebugCls As String = JsonConvert.SerializeObject(md)
             'TempFileCache.WriteLog(TempFolder & "\PaymentPostValues.txt", DebugCls & vbCrLf & "*********************** " & Date.Now.ToString() & vbCrLf)
-            
+
             ' **** Validate Card
             Result = CC.ValidateCard()
 
             If CC.UseTestTransaction Then
-                ResultTxt.Append("0|" & CC.ValidatedMessage & "<hr>" & CC.ErrorMessage & "<br>")
+                ResultTxt.Append(CC.ValidatedMessage & "<hr>" & CC.ErrorMessage & "<br>")
             ElseIf Result Then
                 ' *** Should be APPROVED
                 ResultTxt.Append("Approved: " & CC.ValidatedMessage)
@@ -579,7 +579,7 @@ Partial Class Checkout
             SendErrorMessage("scott@jskdesign.net", ResultTxt.ToString())
         End If
 
-        If Result Then
+        If Result Or CC.UseTestTransaction Then
             Return "0|" & ResultTxt.ToString() & "|" & MyCartID
         Else
             Return ResultTxt.ToString()
