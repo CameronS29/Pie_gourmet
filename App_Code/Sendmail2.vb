@@ -1,10 +1,12 @@
 Imports System.IO
+Imports Mandrill
+Imports Mandrill.MandrillApi
 Imports MailBee
 Imports MailBee.SmtpMail
 Imports MailBee.Mime
 Imports MailBee.Security
 
-'Send Mail class using MailBee SMTP Component
+'Send Mail class using Mandrill
 Public Class Sendmail
 
     'Set Variables
@@ -27,7 +29,7 @@ Public Class Sendmail
     Private _MailLogo As String = "assets/images/email_logo.jpg"
     Private _FooterFile As String = "legal.htm"
     Private _Urgent As Boolean = False
-    Private _MyMessageObject As MailMessage
+    Private _MyMessageObject As Mandrill.Models.EmailMessage
 
     'Server Settings
     Private _mailServer As String = ConfigurationManager.AppSettings("MailServer")
@@ -35,6 +37,7 @@ Public Class Sendmail
     Private _mailPassword As String = ConfigurationManager.AppSettings("MailPassword")
     Private msgQueue As String = ConfigurationManager.AppSettings("MessageQ")
     Private MailBeeLicense As String = ConfigurationManager.AppSettings("MailBeeLicenseKey")
+    Private MandrillAPIKey As String = ConfigurationManager.AppSettings("MandrillAPIKey")
     Private webURL As String = ConfigurationManager.AppSettings("AppURL")
     Private MailLog As String = ConfigurationManager.AppSettings("LogFolder")
 
@@ -238,11 +241,11 @@ Public Class Sendmail
         End Set
     End Property
 
-    Public Property MyMessageObject() As MailMessage
+    Public Property MyMessageObject() As Mandrill.Models.EmailMessage
         Get
             Return (_MyMessageObject)
         End Get
-        Set(ByVal Value As MailMessage)
+        Set(ByVal Value As Mandrill.Models.EmailMessage)
             _MyMessageObject = Value
         End Set
     End Property
@@ -254,100 +257,205 @@ Public Class Sendmail
     '----------------------------------------------------------------------
     Public Sub SendEmail()
         'Set SMTP License Key:
-        MailBee.Global.LicenseKey = MailBeeLicense
-        Dim oMailer As New MailBee.SmtpMail.Smtp
-        Dim mMsg As New MailBee.Mime.MailMessage
-
-        Dim attFiles() As String
-        Dim SetBody As String = ""
-        Dim dPrivateKey As String = "MIIBNgIBAAJA/u4mFcjXc4b224XAKpB/4w66Npc1JFU6ZggufmCltjSpwGj7Kmr5eIF58IwOt9ryJkIz9Iv7oMN+NkigQZf1rQIDAQABAkBTFG2Y/+EnJz7f/9DGjlz/NFd/XvvUoWnswpHUYc7fd9ev0C7PgBSjNpl0QN3v0shiY9XeA5laZ9(+kUm32EebBAiD / ToduBqeDPxqTj45EkKud)zL2/b+7xLVopcBoYBBVRKQIg/59bqJ2gv5BbyvHBkaqFOD13mlkcMohM8oiMVRPS/OUCIDx8t3tq2i8vOTWysksuV2qYgnAjreG4E/9zTstX1FEZAiC6PdwlRPtqtv36JhwXSnsXl8k9frFJq/8MMiq0jeYKdQIgRROmjDIziV2uUJApVJppGrs0riNjEJAyzLYhhaOJLxc="
-
-        Dim i As Integer
-
-        'Build Mail Text
+        Dim mandrill_api As New Mandrill.MandrillApi(MandrillAPIKey)
+        Dim msg As New Mandrill.Models.EmailMessage
+        Dim toArray(1) As Mandrill.Models.EmailAddress
         If Me.mailHTML = 1 Then
-            SetBody = BuildHTMLEmail()
+            msg.Html = BuildHTMLEmail()
         Else
-            SetBody = Me.mailBody
+            msg.Html = Me.mailBody
+        End If
+        toArray(0) = New Mandrill.Models.EmailAddress(_mailTo)
+        msg.To = toArray
+        msg.FromEmail = _mailFrom
+        msg.BccAddress = _mailBCC
+        msg.Subject = _mailSubject
+
+        'Dim attFiles() As String
+        'Dim i As Integer
+        'Dim emailAttachment As Mandrill.Models.Attachment
+        Dim sendMessageRequest As Mandrill.Requests.Messages.SendMessageRequest
+        Dim res As Mandrill.Models.EmailResult
+
+        'If Me.mailAttachments <> "" Then
+        '    emailAttachment = New Mandrill.Models.Attachment()
+        '    If InStr(1, Me.mailAttachments, "|", 1) >= 1 Then
+        '        attFiles = Split(Me.mailAttachments, "|")
+        '        For i = 0 To UBound(attFiles)
+        '            If Trim(attFiles(i)) <> "" Then
+        '                emailAttachment.Add(Trim(attFiles(i)))
+        '            End If
+        '        Next
+        '        msg.Attachments = emailAttachment
+        '    Else
+        '        emailAttachment.Content = Me.mailAttachments
+        '        msg.Attachments = emailAttachment
+        '    End If
+        'End If
+
+        If Me.UrgentMessage Then
+            msg.Important = True
         End If
 
-        'Live Configuration
-        'Set user credentials for the SMTP authentication
-        oMailer.SmtpServers.Add(MailServer, MailUser, MailPassword)
-
-        With oMailer.Message
-            .To.AsString = _mailTo
-            .From.AsString = _mailFrom
-            .Cc.AsString = _mailCC
-            .Bcc.AsString = _mailBCC
-            .Subject = _mailSubject
-
-            If Me.mailHTML = 1 Then
-                .BodyHtmlText = SetBody
-            Else
-                .BodyPlainText = SetBody
-            End If
-
-            If Me.mailAttachments <> "" Then
-                If InStr(1, Me.mailAttachments, "|", 1) >= 1 Then
-                    attFiles = Split(Me.mailAttachments, "|")
-
-                    For i = 0 To UBound(attFiles)
-                        If Trim(attFiles(i)) <> "" Then
-                            .Attachments.Add(Trim(attFiles(i)))
-                        End If
-                    Next
-                Else
-                    .Attachments.Add(Me.mailAttachments)
-                End If
-            End If
-
-            If Me.UrgentMessage Then
-                .Importance = MailPriority.Highest
-                .Priority = MailPriority.Highest
-            End If
-        End With
-
-        'Try
-        '    ' Sign the message and assign the signed message for sending.
-        '    Dim dk As New DomainKeys
-        '    oMailer.Message = dk.Sign(mMsg, Nothing, dPrivateKey, False, "nkey")
-        'Catch ex As MailBeeInvalidArgumentException
-        '    'Do nothing
-        'End Try
-
         Try
-            'Save Message Object
-            Me.MyMessageObject = oMailer.Message
+            Me.MyMessageObject = msg
+            sendMessageRequest = New Mandrill.Requests.Messages.SendMessageRequest(msg)
+            Dim resTask As Threading.Tasks.Task(Of List(Of Mandrill.Models.EmailResult)) = mandrill_api.SendMessage(sendMessageRequest)
+            resTask.Wait()
 
-            If _useQueue Then
-                oMailer.SubmitToPickupFolder(msgQueue, False)
+            If resTask.Result IsNot Nothing And resTask.Result.Count > 0 Then
+                res = resTask.Result.First()
             Else
-                oMailer.Send()
+                WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email Error: Invalid return result from provider")
+                MailError = "Invalid return result from provider"
+                Return
             End If
 
             WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email sent successfully to: " & _mailTo)
-            Me.ErrorCode = oMailer.LastResult
             Me.MailError = "Message:" & _mailSubject & " Logged/Sent"
-
-        Catch mb As MailBeeException
-            Me.ErrorCode = oMailer.LastResult
-            MailError = mb.Message.ToString()
-            WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email Error: " & mb.Message.ToString())
+        Catch md As Mandrill.Utilities.MandrillException
+            MailError = md.Message.ToString() & msg.To.ToString()
+            WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email Error: " & md.Message.ToString())
         Catch ex As Exception
             WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email Error: " & ex.Message.ToString())
             MailError = ex.Message.ToString
-            Me.ErrorCode = 99
             Throw ex
         End Try
+
+        'With oMailer.Message
+        '    .To.AsString = _mailTo
+        '    .From.AsString = _mailFrom
+        '    .Cc.AsString = _mailCC
+        '    .Bcc.AsString = _mailBCC
+        '    .Subject = _mailSubject
+
+        '    If Me.mailHTML = 1 Then
+        '        .BodyHtmlText = SetBody
+        '    Else
+        '        .BodyPlainText = SetBody
+        '    End If
+
+        '    If Me.mailAttachments <> "" Then
+        '        If InStr(1, Me.mailAttachments, "|", 1) >= 1 Then
+        '            attFiles = Split(Me.mailAttachments, "|")
+
+        '            For i = 0 To UBound(attFiles)
+        '                If Trim(attFiles(i)) <> "" Then
+        '                    .Attachments.Add(Trim(attFiles(i)))
+        '                End If
+        '            Next
+        '        Else
+        '            .Attachments.Add(Me.mailAttachments)
+        '        End If
+        '    End If
+
+        '    If Me.UrgentMessage Then
+        '        .Importance = MailPriority.Highest
+        '        .Priority = MailPriority.Highest
+        '    End If
+        'End With
+        'Dim sendmsgreq As New Mandrill.Requests.Messages.SendMessageRequest(msg)
+        'mandrill_api.SendMessage(sendmsgreq)
+
+
+
+
+
+
+        'MailBee.Global.LicenseKey = MailBeeLicense
+        'Dim oMailer As New MailBee.SmtpMail.Smtp
+        'Dim mMsg As New MailBee.Mime.MailMessage
+
+        'Dim attFiles() As String
+        'Dim SetBody As String = ""
+        'Dim dPrivateKey As String = "MIIBNgIBAAJA/u4mFcjXc4b224XAKpB/4w66Npc1JFU6ZggufmCltjSpwGj7Kmr5eIF58IwOt9ryJkIz9Iv7oMN+NkigQZf1rQIDAQABAkBTFG2Y/+EnJz7f/9DGjlz/NFd/XvvUoWnswpHUYc7fd9ev0C7PgBSjNpl0QN3v0shiY9XeA5laZ9(+kUm32EebBAiD / ToduBqeDPxqTj45EkKud)zL2/b+7xLVopcBoYBBVRKQIg/59bqJ2gv5BbyvHBkaqFOD13mlkcMohM8oiMVRPS/OUCIDx8t3tq2i8vOTWysksuV2qYgnAjreG4E/9zTstX1FEZAiC6PdwlRPtqtv36JhwXSnsXl8k9frFJq/8MMiq0jeYKdQIgRROmjDIziV2uUJApVJppGrs0riNjEJAyzLYhhaOJLxc="
+
+        'Dim i As Integer
+
+        ''Build Mail Text
+        'If Me.mailHTML = 1 Then
+        '    SetBody = BuildHTMLEmail()
+        'Else
+        '    SetBody = Me.mailBody
+        'End If
+
+        ''Live Configuration
+        ''Set user credentials for the SMTP authentication
+        'oMailer.SmtpServers.Add(MailServer, MailUser, MailPassword)
+
+        'With oMailer.Message
+        '    .To.AsString = _mailTo
+        '    .From.AsString = _mailFrom
+        '    .Cc.AsString = _mailCC
+        '    .Bcc.AsString = _mailBCC
+        '    .Subject = _mailSubject
+
+        '    If Me.mailHTML = 1 Then
+        '        .BodyHtmlText = SetBody
+        '    Else
+        '        .BodyPlainText = SetBody
+        '    End If
+
+        '    If Me.mailAttachments <> "" Then
+        '        If InStr(1, Me.mailAttachments, "|", 1) >= 1 Then
+        '            attFiles = Split(Me.mailAttachments, "|")
+
+        '            For i = 0 To UBound(attFiles)
+        '                If Trim(attFiles(i)) <> "" Then
+        '                    .Attachments.Add(Trim(attFiles(i)))
+        '                End If
+        '            Next
+        '        Else
+        '            .Attachments.Add(Me.mailAttachments)
+        '        End If
+        '    End If
+
+        '    If Me.UrgentMessage Then
+        '        .Importance = MailPriority.Highest
+        '        .Priority = MailPriority.Highest
+        '    End If
+        'End With
+
+        ''Try
+        ''    ' Sign the message and assign the signed message for sending.
+        ''    Dim dk As New DomainKeys
+        ''    oMailer.Message = dk.Sign(mMsg, Nothing, dPrivateKey, False, "nkey")
+        ''Catch ex As MailBeeInvalidArgumentException
+        ''    'Do nothing
+        ''End Try
+
+        'Try
+        '    'Save Message Object
+        '    Me.MyMessageObject = oMailer.Message
+
+        '    If _useQueue Then
+        '        oMailer.SubmitToPickupFolder(msgQueue, False)
+        '    Else
+        '        oMailer.Send()
+        '    End If
+
+        '    WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email sent successfully to: " & _mailTo)
+        '    Me.ErrorCode = oMailer.LastResult
+        '    Me.MailError = "Message:" & _mailSubject & " Logged/Sent"
+
+        'Catch mb As MailBeeException
+        '    Me.ErrorCode = oMailer.LastResult
+        '    MailError = mb.Message.ToString()
+        '    WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email Error: " & mb.Message.ToString())
+        'Catch ex As Exception
+        '    WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email Error: " & ex.Message.ToString())
+        '    MailError = ex.Message.ToString
+        '    Me.ErrorCode = 99
+        '    Throw ex
+        'End Try
     End Sub
 
     Private Function BuildHTMLEmail() As String
         Dim sHTML As New System.Text.StringBuilder
         sHTML.Append("<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.01 Transitional//EN"" ""http://www.w3.org/TR/html4/loose.dtd"">")
-        sHTML.Append("<html>")
-        sHTML.Append("<head>")
-        sHTML.Append("<meta http-equiv=""Content-Type""")
+        sHTML.Append("< Html > ")
+        sHTML.Append(" < head > ")
+        sHTML.Append(" < meta http-equiv=""Content-Type""")
         sHTML.Append(" content=""text/html; charset=iso-8859-1"">")
         sHTML.Append("<link type='text/css' rel='stylesheet' href='" & webURL & _MailStyle & "'/>")
         sHTML.Append("<style>")

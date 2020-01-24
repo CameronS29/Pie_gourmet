@@ -1,0 +1,3 @@
+Time: 9:00 PM | User: shop@piegourmet.com | Subject: Pie Gourmet Order Confirmation | Email Error: One or more errors occurred.
+Time: 9:11 PM | User: shop@piegourmet.com | Subject: Pie Gourmet Order Confirmation | Email Error: One or more errors occurred.
+Time: 9:31 PM | User: shop@piegourmet.com | Subject: Pie Gourmet Order Confirmation | Email sent successfully to: ogoloj@gmail.com

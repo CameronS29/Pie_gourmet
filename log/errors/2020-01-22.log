@@ -13,3 +13,4 @@ Login failed for user 'WORKGROUP\DESKTOP-CKG6762$'.
 2020-01-22 21:02:49.4520 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
 2020-01-22 21:04:53.0598 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
 2020-01-22 21:07:20.7584 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
+2020-01-22 22:34:20.3823 ERROR Checkout Functions: BuildCartItem - LicenseKey is invalid. See documentation on MailBee.Global.LicenseKey property of the component for more information.
