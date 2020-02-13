@@ -122,3 +122,7 @@
 1/24/2020 5:01:18 AM - Jon Ogolo [15949] - 4242424242 - Result: 1|1|1|(TESTMODE) This transaction has been approved.|000000|P|0|qb3ljgshr4nkwgc4ponq|Pie Gourmet ordering # qb3ljgshr4nkwgc4ponqdty4 Bill Code:|82.95|CC|auth_only|15949|Jon|Ogolo||510 Meadow Lane SW|Vienna|VA|22180|US|703-281-7437||ogoloj@gmail.com|||||||||||||||||||||||||||XXXX4242|Visa||||||||||||||||| - Result Msg: APPROVED - (TESTMODE) This transaction has been approved. - 82.95
 1/24/2020 10:34:08 AM - Jon Ogolo [15949] - 4242424242424 - ResultMsg:  - 58.97
 1/24/2020 10:34:08 AM - Jon Ogolo [15949] - 4242424242 - Result:  - Result Msg: FAILED - The request was aborted: Could not create SSL/TLS secure channel. - 58.97
+1/26/2020 8:56:41 PM - Jon Ogolo [15949] - 234234234 - ResultMsg:  - 58.97
+1/26/2020 8:56:41 PM - Jon Ogolo [15949] - 234234234 - Result:  - Result Msg: FAILED - The request was aborted: Could not create SSL/TLS secure channel. - 58.97
+2/13/2020 9:01:46 AM - Jon Ogolo [15949] - 123 - ResultMsg:  - 58.97
+2/13/2020 9:01:46 AM - Jon Ogolo [15949] - 123 - Result:  - Result Msg: FAILED - The request was aborted: Could not create SSL/TLS secure channel. - 58.97

@@ -255,7 +255,7 @@ Public Class Sendmail
     '	Function: SendEmail
     '   This Function sends email using MailBee message queueing or not (whatever...)
     '----------------------------------------------------------------------
-    Public Sub SendEmail()
+    Public Async Sub SendEmail()
         'Set SMTP License Key:
         Dim mandrill_api As New Mandrill.MandrillApi(MandrillAPIKey)
         Dim msg As New Mandrill.Models.EmailMessage
@@ -300,16 +300,19 @@ Public Class Sendmail
         Try
             Me.MyMessageObject = msg
             sendMessageRequest = New Mandrill.Requests.Messages.SendMessageRequest(msg)
-            Dim resTask As Threading.Tasks.Task(Of List(Of Mandrill.Models.EmailResult)) = mandrill_api.SendMessage(sendMessageRequest)
-            resTask.Wait()
+            'Dim resTask As Threading.Tasks.Task(Of List(Of Mandrill.Models.EmailResult)) = mandrill_api.SendMessage(sendMessageRequest)
+            'resTask.Wait()
 
-            If resTask.Result IsNot Nothing And resTask.Result.Count > 0 Then
-                res = resTask.Result.First()
-            Else
+            'If resTask.Result IsNot Nothing And resTask.Result.Count > 0 Then
+            '    res = resTask.Result.First()
+            Try
+                Dim result As List(Of Mandrill.Models.EmailResult) = Await mandrill_api.SendMessage(sendMessageRequest)
+                res = result.First()
+            Catch ex As Exception
                 WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email Error: Invalid return result from provider")
                 MailError = "Invalid return result from provider"
                 Return
-            End If
+            End Try
 
             WriteLog("Time: " & Now.ToShortTimeString & " | User: " & _mailFrom & " | Subject: " & _mailSubject & " | Email sent successfully to: " & _mailTo)
             Me.MailError = "Message:" & _mailSubject & " Logged/Sent"
